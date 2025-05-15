@@ -23,19 +23,28 @@ const config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#F9FAFB",
-        foreground: "#111827",
+        background: {
+          DEFAULT: "#F9FAFB",
+          dark: "#111827",
+        },
+        foreground: {
+          DEFAULT: "#111827",
+          dark: "#F9FAFB",
+        },
         primary: {
           DEFAULT: "#3B82F6",
           foreground: "hsl(var(--primary-foreground))",
+          dark: "#60A5FA",
         },
         secondary: {
           DEFAULT: "#10B981",
           foreground: "hsl(var(--secondary-foreground))",
+          dark: "#34D399",
         },
         accent: {
           DEFAULT: "#F97316",
           foreground: "hsl(var(--accent-foreground))",
+          dark: "#FB923C",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
