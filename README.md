@@ -1,30 +1,27 @@
-# Spots Running MVP design
+# Stridemap
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+Aplicación para descubrir y compartir rutas para correr.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/javiovis-projects/v0-spots-running-mvp-design)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/gqQoTCiWtWR)
+## Configuración de variables de entorno
 
-## Overview
+Para ejecutar este proyecto, necesitarás configurar las siguientes variables de entorno:
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+\`\`\`bash
+# Mapbox token (solo para el servidor)
+MAPBOX_TOKEN=your_mapbox_token_here
+\`\`\`
 
-## Deployment
+Crea un archivo `.env.local` en la raíz del proyecto con estas variables.
 
-Your project is live at:
+## Desarrollo
 
-**[https://vercel.com/javiovis-projects/v0-spots-running-mvp-design](https://vercel.com/javiovis-projects/v0-spots-running-mvp-design)**
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
 
-## Build your app
+## Producción
 
-Continue building your app on:
-
-**[https://v0.dev/chat/projects/gqQoTCiWtWR](https://v0.dev/chat/projects/gqQoTCiWtWR)**
-
-## How It Works
-
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+\`\`\`bash
+npm run build
+npm start

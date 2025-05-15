@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { Route } from "@/data/routes"
+import { useMapboxToken } from "@/hooks/useMapboxToken"
 
 interface StaticMapProps {
   selectedRoute: Route
@@ -10,10 +11,12 @@ interface StaticMapProps {
 
 export default function StaticMap({ selectedRoute, height = 400 }: StaticMapProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
+  const { token, loading, error } = useMapboxToken()
+  const [iframeContent, setIframeContent] = useState<string | null>(null)
 
   // Crear el HTML para el iframe que carga Mapbox directamente
   useEffect(() => {
-    if (!iframeRef.current) return
+    if (!token || error) return
 
     // Centrar en el primer punto de la ruta
     const center = selectedRoute.coordinates[0]
@@ -37,7 +40,7 @@ export default function StaticMap({ selectedRoute, height = 400 }: StaticMapProp
         <div id="map"></div>
         <script>
           // Inicializar el mapa
-          mapboxgl.accessToken = '${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}';
+          mapboxgl.accessToken = '${token}';
           const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v12',
@@ -104,8 +107,14 @@ export default function StaticMap({ selectedRoute, height = 400 }: StaticMapProp
       </html>
     `
 
+    setIframeContent(html)
+  }, [token, error, selectedRoute])
+
+  useEffect(() => {
+    if (!iframeRef.current || !iframeContent) return
+
     // Establecer el contenido del iframe
-    const blob = new Blob([html], { type: "text/html" })
+    const blob = new Blob([iframeContent], { type: "text/html" })
     const url = URL.createObjectURL(blob)
     iframeRef.current.src = url
 
@@ -113,7 +122,23 @@ export default function StaticMap({ selectedRoute, height = 400 }: StaticMapProp
     return () => {
       URL.revokeObjectURL(url)
     }
-  }, [selectedRoute])
+  }, [iframeContent])
+
+  if (loading) {
+    return (
+      <div className="h-[400px] w-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ height }}>
+        <p className="text-gray-500">Cargando mapa...</p>
+      </div>
+    )
+  }
+
+  if (error || !token) {
+    return (
+      <div className="h-[400px] w-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ height }}>
+        <p className="text-red-500">Error al cargar el mapa</p>
+      </div>
+    )
+  }
 
   return (
     <iframe

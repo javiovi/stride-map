@@ -4,17 +4,14 @@
 
 import { useState, useEffect } from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
-import Map, { Source, Layer, NavigationControl, Marker } from "react-map-gl"
+import Map from "react-map-gl/dist/esm/components/map"
+import Source from "react-map-gl/dist/esm/components/source"
+import Layer from "react-map-gl/dist/esm/components/layer"
+import NavigationControl from "react-map-gl/dist/esm/components/navigation-control"
+import Marker from "react-map-gl/dist/esm/components/marker"
 import { MapPin } from "lucide-react"
-
-// Tipo para las rutas
-export interface Route {
-  id: string
-  name: string
-  coordinates: [number, number][]
-  distance: string
-  difficulty: string
-}
+import type { Route } from "@/data/routes"
+import { useMapboxToken } from "@/hooks/useMapboxToken"
 
 // Props para el componente
 interface RouteMapProps {
@@ -38,6 +35,7 @@ const routeLayer = {
 }
 
 export default function RouteMap({ selectedRoute, height = 400 }: RouteMapProps) {
+  const { token, loading, error } = useMapboxToken()
   const [viewState, setViewState] = useState({
     longitude: selectedRoute.coordinates[0][0],
     latitude: selectedRoute.coordinates[0][1],
@@ -67,12 +65,28 @@ export default function RouteMap({ selectedRoute, height = 400 }: RouteMapProps)
     },
   }
 
+  if (loading) {
+    return (
+      <div className="h-[400px] w-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ height }}>
+        <p className="text-gray-500">Cargando mapa...</p>
+      </div>
+    )
+  }
+
+  if (error || !token) {
+    return (
+      <div className="h-[400px] w-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ height }}>
+        <p className="text-red-500">Error al cargar el mapa</p>
+      </div>
+    )
+  }
+
   return (
     <Map
       {...viewState}
       onMove={(evt) => setViewState(evt.viewState)}
       mapStyle="mapbox://styles/mapbox/streets-v12"
-      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+      mapboxAccessToken={token}
       onLoad={() => setMapLoaded(true)}
       style={{ width: "100%", height }}
     >
