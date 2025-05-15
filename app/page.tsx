@@ -7,39 +7,33 @@ import { SAMPLE_ROUTES } from "@/data/routes"
 import type { Route } from "@/data/routes"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import RouteCard from "@/components/RouteCard"
+import RutaCard from "@/components/RutaCard"
 
 // Datos de muestra para las tarjetas de rutas
-const SAMPLE_ROUTE_CARDS = [
+const RUTAS_EJEMPLO = [
   {
-    id: "route-1",
-    name: "Parque Centenario",
-    type: "Urbana",
-    distance: "2.5 km",
-    difficulty: "Fácil",
-    origin: "OSM",
-    location: "Buenos Aires",
-    creator: "StrideMap",
+    id: "bosques-palermo",
+    nombre: "Bosques de Palermo",
+    distancia: "4.8 km",
+    superficie: "Tierra y césped",
+    dificultad: "Moderada",
+    origen: "Sugerida",
   },
   {
-    id: "route-2",
-    name: "Bosques de Palermo",
-    type: "Mixta",
-    distance: "4.2 km",
-    difficulty: "Moderado",
-    origin: "Usuario",
-    location: "Buenos Aires",
-    creator: "RunnerPro",
+    id: "costanera-sur",
+    nombre: "Costanera Sur",
+    distancia: "6.2 km",
+    superficie: "Asfalto",
+    dificultad: "Fácil",
+    origen: "Usuario",
   },
   {
-    id: "route-3",
-    name: "Costanera Sur",
-    type: "Trail",
-    distance: "5.8 km",
-    difficulty: "Difícil",
-    origin: "Usuario",
-    location: "Buenos Aires",
-    creator: "MaratonistaBsAs",
+    id: "reserva-ecologica",
+    nombre: "Reserva Ecológica",
+    distancia: "8.5 km",
+    superficie: "Tierra compacta",
+    dificultad: "Difícil",
+    origen: "Sugerida",
   },
 ]
 
@@ -134,25 +128,22 @@ export default function Home() {
           <div className="container mx-auto px-6">
             <div className="flex justify-between items-center mb-10">
               <h2 className="text-3xl font-bold text-gray-900">Rutas destacadas</h2>
-              <a href="/explorar" className="text-[#3B82F6] hover:text-[#2563EB] font-medium flex items-center">
+              <a href="/rutas-ejemplo" className="text-[#3B82F6] hover:text-[#2563EB] font-medium flex items-center">
                 Ver todas
                 <ArrowRight size={16} className="ml-1" />
               </a>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {SAMPLE_ROUTE_CARDS.map((route) => (
-                <RouteCard
-                  key={route.id}
-                  id={route.id}
-                  name={route.name}
-                  type={route.type as any}
-                  distance={route.distance}
-                  difficulty={route.difficulty as any}
-                  origin={route.origin as any}
-                  location={route.location}
-                  creator={route.creator}
-                  href={`/ruta/${route.id}`}
+              {RUTAS_EJEMPLO.map((ruta) => (
+                <RutaCard
+                  key={ruta.id}
+                  id={ruta.id}
+                  nombre={ruta.nombre}
+                  distancia={ruta.distancia}
+                  superficie={ruta.superficie}
+                  dificultad={ruta.dificultad as any}
+                  origen={ruta.origen as any}
                 />
               ))}
             </div>
