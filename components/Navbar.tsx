@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X, MapPin, User, Search, LogIn } from "lucide-react"
-import { motion } from "framer-motion"
+import { Menu, X, MapPin, Upload, User } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -27,17 +27,17 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+        isScrolled ? "bg-white shadow-md py-2" : "bg-white py-4"
       }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <div className="relative h-10 w-10 mr-2">
               <Image
                 src="/images/logo-stride.png"
-                alt="Stridemap Logo"
+                alt="StrideMap Logo"
                 width={40}
                 height={40}
                 className="object-contain"
@@ -45,24 +45,23 @@ export default function Navbar() {
               />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-[#3B82F6] to-[#10B981] bg-clip-text text-transparent">
-              Stridemap
+              StrideMap
             </span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <NavLink href="/explorar" icon={<MapPin size={18} />}>
-              Explorar
+              Explorar rutas
             </NavLink>
-            <NavLink href="/buscar" icon={<Search size={18} />}>
-              Buscar
+            <NavLink href="/subir" icon={<Upload size={18} />}>
+              Subir ruta
             </NavLink>
             <NavLink href="/perfil" icon={<User size={18} />}>
-              Mi Perfil
+              Mi perfil
             </NavLink>
             <button className="bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:shadow-lg transition-all duration-300">
-              <LogIn size={18} />
-              Ingresar
+              Iniciar sesión
             </button>
           </nav>
 
@@ -77,34 +76,74 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden bg-white shadow-lg"
-        >
-          <div className="container mx-auto px-4 py-4">
-            <nav className="flex flex-col space-y-4">
-              <MobileNavLink href="/explorar" icon={<MapPin size={18} />}>
-                Explorar
-              </MobileNavLink>
-              <MobileNavLink href="/buscar" icon={<Search size={18} />}>
-                Buscar
-              </MobileNavLink>
-              <MobileNavLink href="/perfil" icon={<User size={18} />}>
-                Mi Perfil
-              </MobileNavLink>
-              <button className="bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-300 w-full">
-                <LogIn size={18} />
-                Ingresar
-              </button>
-            </nav>
-          </div>
-        </motion.div>
-      )}
+      {/* Mobile Navigation - Side Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed top-0 right-0 h-full w-4/5 bg-white shadow-xl z-50 md:hidden"
+          >
+            <div className="flex flex-col h-full">
+              <div className="flex justify-between items-center p-6 border-b">
+                <div className="flex items-center">
+                  <div className="relative h-8 w-8 mr-2">
+                    <Image
+                      src="/images/logo-stride.png"
+                      alt="StrideMap Logo"
+                      width={32}
+                      height={32}
+                      className="object-contain"
+                    />
+                  </div>
+                  <span className="text-lg font-bold bg-gradient-to-r from-[#3B82F6] to-[#10B981] bg-clip-text text-transparent">
+                    StrideMap
+                  </span>
+                </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                  aria-label="Cerrar menú"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <nav className="flex flex-col p-6 space-y-6 flex-grow">
+                <MobileNavLink href="/explorar" icon={<MapPin size={20} />}>
+                  Explorar rutas
+                </MobileNavLink>
+                <MobileNavLink href="/subir" icon={<Upload size={20} />}>
+                  Subir ruta
+                </MobileNavLink>
+                <MobileNavLink href="/perfil" icon={<User size={20} />}>
+                  Mi perfil
+                </MobileNavLink>
+                <div className="mt-auto pt-6 border-t">
+                  <button className="w-full bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-lg transition-all duration-300">
+                    Iniciar sesión
+                  </button>
+                </div>
+              </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Overlay for mobile menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black z-40 md:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </header>
   )
 }
@@ -127,7 +166,7 @@ function MobileNavLink({ href, children, icon }) {
   return (
     <Link
       href={href}
-      className="text-gray-700 hover:text-[#3B82F6] transition-colors duration-300 flex items-center gap-2 py-2"
+      className="text-gray-700 hover:text-[#3B82F6] transition-colors duration-300 flex items-center gap-3 py-2 text-lg"
     >
       {icon}
       {children}

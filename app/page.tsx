@@ -2,12 +2,46 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Upload } from "lucide-react"
-import Image from "next/image"
+import { MapPin, ArrowRight } from "lucide-react"
 import { SAMPLE_ROUTES } from "@/data/routes"
 import type { Route } from "@/data/routes"
-import MapWrapper from "@/components/MapWrapper"
 import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
+import RouteCard from "@/components/RouteCard"
+
+// Datos de muestra para las tarjetas de rutas
+const SAMPLE_ROUTE_CARDS = [
+  {
+    id: "route-1",
+    name: "Parque Centenario",
+    type: "Urbana",
+    distance: "2.5 km",
+    difficulty: "Fácil",
+    origin: "OSM",
+    location: "Buenos Aires",
+    creator: "StrideMap",
+  },
+  {
+    id: "route-2",
+    name: "Bosques de Palermo",
+    type: "Mixta",
+    distance: "4.2 km",
+    difficulty: "Moderado",
+    origin: "Usuario",
+    location: "Buenos Aires",
+    creator: "RunnerPro",
+  },
+  {
+    id: "route-3",
+    name: "Costanera Sur",
+    type: "Trail",
+    distance: "5.8 km",
+    difficulty: "Difícil",
+    origin: "Usuario",
+    location: "Buenos Aires",
+    creator: "MaratonistaBsAs",
+  },
+]
 
 export default function Home() {
   const [selectedRoute, setSelectedRoute] = useState<Route>(SAMPLE_ROUTES[0])
@@ -33,165 +67,159 @@ export default function Home() {
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex min-h-screen flex-col items-center bg-[#F9FAFB] pt-20">
-        {/* Hero Section */}
-        <motion.section
-          className="w-full py-16 px-4 md:px-8 flex flex-col items-center text-center"
-          initial="hidden"
-          animate="visible"
-          variants={staggerChildren}
-        >
-          <motion.h1 className="text-4xl md:text-5xl font-semibold text-[#111827] mb-4" variants={fadeUp}>
-            Descubrí y compartí rutas para correr
-          </motion.h1>
 
-          <motion.p className="text-xl text-[#111827]/80 mb-8 max-w-2xl" variants={fadeUp}>
-            Agregá spots, rutas y unite a la comunidad
-          </motion.p>
-
-          <motion.button
-            className="bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white px-8 py-3 rounded-xl font-medium text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/50"
-            variants={fadeUp}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            aria-label="Explorar rutas sugeridas"
-          >
-            Explorar rutas sugeridas
-          </motion.button>
-        </motion.section>
-
-        {/* Map Section */}
-        <motion.section
-          className="w-full max-w-6xl px-4 md:px-8 mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-        >
-          <div className="bg-white p-4 rounded-2xl shadow-lg overflow-hidden">
-            <div className="flex flex-wrap gap-4 mb-4">
-              {SAMPLE_ROUTES.map((route) => (
-                <button
-                  key={route.id}
-                  onClick={() => setSelectedRoute(route)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    selectedRoute.id === route.id
-                      ? "bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                  aria-label={`Ver ruta ${route.name}`}
+      <main className="flex-grow pt-20">
+        {/* Hero Section Extendido */}
+        <section className="bg-gradient-to-br from-white to-gray-50 py-20 md:py-32">
+          <div className="container mx-auto px-6">
+            <div className="flex flex-col md:flex-row items-center">
+              <motion.div
+                className="md:w-1/2 text-center md:text-left mb-12 md:mb-0"
+                initial="hidden"
+                animate="visible"
+                variants={staggerChildren}
+              >
+                <motion.h1
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+                  variants={fadeUp}
                 >
-                  {route.name} ({route.distance})
-                </button>
-              ))}
-            </div>
+                  Trazá tu camino.
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3B82F6] to-[#10B981]">
+                    Dejá tu huella.
+                  </span>
+                </motion.h1>
 
-            <div className="h-[500px] rounded-xl overflow-hidden">
-              <MapWrapper selectedRoute={selectedRoute} height={500} useStaticMap={true} />
-            </div>
+                <motion.p className="text-xl text-gray-600 mb-8 max-w-lg mx-auto md:mx-0" variants={fadeUp}>
+                  Explorá, creá y compartí rutas para correr en cualquier parte del mundo.
+                </motion.p>
 
-            <div className="mt-4 p-4 bg-gray-50 rounded-xl">
-              <h3 className="font-semibold text-lg mb-2">{selectedRoute.name}</h3>
-              <div className="flex gap-4 text-sm">
-                <span className="flex items-center gap-1">
-                  <span className="font-medium">Distancia:</span> {selectedRoute.distance}
-                </span>
-                <span className="flex items-center gap-1">
-                  <span className="font-medium">Dificultad:</span> {selectedRoute.difficulty}
-                </span>
-              </div>
+                <motion.div
+                  className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+                  variants={fadeUp}
+                >
+                  <button className="bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white px-8 py-3 rounded-xl font-medium text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/50">
+                    Explorar rutas
+                  </button>
+                  <button className="bg-white text-gray-800 border border-gray-200 px-8 py-3 rounded-xl font-medium text-lg hover:bg-gray-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                    Crear cuenta
+                  </button>
+                </motion.div>
+              </motion.div>
+
+              <motion.div
+                className="md:w-1/2"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                <div className="relative h-[300px] md:h-[400px] w-full rounded-2xl overflow-hidden shadow-lg">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#3B82F6]/10 to-[#10B981]/10 flex items-center justify-center">
+                    <div className="text-center p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm">
+                      <MapPin size={40} className="mx-auto mb-3 text-[#3B82F6]" />
+                      <p className="text-gray-800 font-medium">Mapa interactivo</p>
+                      <p className="text-gray-500 text-sm">Próximamente</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        {/* Secondary CTA */}
-        <motion.section
-          className="w-full max-w-6xl px-4 md:px-8 mb-20 flex justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-        >
-          <motion.button
-            className="bg-gradient-to-r from-[#10B981] to-[#3B82F6] text-white px-8 py-4 rounded-xl font-medium text-lg shadow-lg flex items-center gap-2 hover:shadow-xl transition-all duration-300 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#10B981]/50"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            aria-label="Subir tu propia ruta"
-          >
-            <Upload size={20} />
-            Subí tu propia ruta
-          </motion.button>
-        </motion.section>
+        {/* Rutas Destacadas */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-6">
+            <div className="flex justify-between items-center mb-10">
+              <h2 className="text-3xl font-bold text-gray-900">Rutas destacadas</h2>
+              <a href="/explorar" className="text-[#3B82F6] hover:text-[#2563EB] font-medium flex items-center">
+                Ver todas
+                <ArrowRight size={16} className="ml-1" />
+              </a>
+            </div>
 
-        {/* Features Section */}
-        <motion.section
-          className="w-full bg-white py-16 px-4 md:px-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-        >
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-semibold text-center mb-12 text-[#111827]">¿Por qué usar Stridemap?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {SAMPLE_ROUTE_CARDS.map((route) => (
+                <RouteCard
+                  key={route.id}
+                  id={route.id}
+                  name={route.name}
+                  type={route.type as any}
+                  distance={route.distance}
+                  difficulty={route.difficulty as any}
+                  origin={route.origin as any}
+                  location={route.location}
+                  creator={route.creator}
+                  href={`/ruta/${route.id}`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-[#F9FAFB] p-6 rounded-2xl">
+        {/* Características */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-6">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">¿Por qué usar StrideMap?</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-white p-6 rounded-2xl shadow-sm">
                 <div className="w-12 h-12 bg-[#3B82F6]/10 rounded-full flex items-center justify-center mb-4">
                   <span className="text-[#3B82F6] text-2xl">🏃</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Descubrí nuevas rutas</h3>
-                <p className="text-[#111827]/70">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">Descubrí nuevas rutas</h3>
+                <p className="text-gray-600">
                   Explora rutas verificadas por la comunidad en tu zona o en cualquier lugar del mundo.
                 </p>
               </div>
 
-              <div className="bg-[#F9FAFB] p-6 rounded-2xl">
+              <div className="bg-white p-6 rounded-2xl shadow-sm">
                 <div className="w-12 h-12 bg-[#10B981]/10 rounded-full flex items-center justify-center mb-4">
                   <span className="text-[#10B981] text-2xl">📍</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Compartí tus spots</h3>
-                <p className="text-[#111827]/70">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">Compartí tus spots</h3>
+                <p className="text-gray-600">
                   Sube tus rutas favoritas y ayuda a otros corredores a descubrir nuevos lugares.
                 </p>
               </div>
 
-              <div className="bg-[#F9FAFB] p-6 rounded-2xl">
+              <div className="bg-white p-6 rounded-2xl shadow-sm">
                 <div className="w-12 h-12 bg-gradient-to-r from-[#3B82F6]/10 to-[#10B981]/10 rounded-full flex items-center justify-center mb-4">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-2xl">
                     👥
                   </span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Unite a la comunidad</h3>
-                <p className="text-[#111827]/70">
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">Unite a la comunidad</h3>
+                <p className="text-gray-600">
                   Conecta con otros corredores, participa en eventos y mejora tu experiencia.
                 </p>
               </div>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        {/* Footer */}
-        <footer className="w-full bg-gray-50 py-8 px-4 md:px-8 mt-auto">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center mb-4 md:mb-0">
-              <div className="relative h-8 w-8 mr-2">
-                <Image
-                  src="/images/logo-stride.png"
-                  alt="Stridemap Logo"
-                  width={32}
-                  height={32}
-                  className="object-contain"
-                />
-              </div>
-              <span className="text-lg font-bold bg-gradient-to-r from-[#3B82F6] to-[#10B981] bg-clip-text text-transparent">
-                Stridemap
-              </span>
-            </div>
-            <div className="text-sm text-gray-500">
-              © {new Date().getFullYear()} Stridemap. Todos los derechos reservados.
+        {/* CTA */}
+        <section className="py-16 bg-gradient-to-r from-[#3B82F6] to-[#10B981] text-white">
+          <div className="container mx-auto px-6 text-center">
+            <h2 className="text-3xl font-bold mb-6">¿Listo para empezar a correr?</h2>
+            <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+              Únete a miles de corredores que ya están descubriendo nuevas rutas cada día.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-white text-[#3B82F6] px-8 py-3 rounded-xl font-medium text-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                Crear cuenta gratis
+              </button>
+              <button className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-xl font-medium text-lg hover:bg-white/10 transition-all duration-300">
+                Saber más
+              </button>
             </div>
           </div>
-        </footer>
+        </section>
       </main>
-    </>
+
+      <Footer />
+    </div>
   )
 }
